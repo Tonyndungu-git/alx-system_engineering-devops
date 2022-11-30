@@ -1,0 +1,4 @@
+#!/bin/bash
+ls -na ./
+ls -na ./..
+ls -na ~/../boot
