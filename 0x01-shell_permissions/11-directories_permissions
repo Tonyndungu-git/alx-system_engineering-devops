@@ -1,3 +1,2 @@
 #!/bin/bash
-chnmod -R a+x *
-
+chmod -R a+x *
