@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -c ^d | ls -l
+grep -c ^d | ls -la
