@@ -1,2 +1,2 @@
 #!/bin/bash
-find -mindepth l -typed | wc -l
+find -type d -pathg'./*'-print | wc -l
