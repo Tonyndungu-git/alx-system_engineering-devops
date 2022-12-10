@@ -1,3 +1,0 @@
-#!/bin/bash
-cprintf '%x\n' $DECIMAL
-
