@@ -1,3 +1,4 @@
+#!/snap/bin/ruby
 input = ARGV[0]
 regex = /School/
 match = input.match(regex)
