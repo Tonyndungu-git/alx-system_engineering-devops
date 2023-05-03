@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
+# Get the argument from the command line
 input = ARGV[0]
-regex = /School/
+
+# Define the regular expression
+regex = /ht{}/
 match = input.match(regex)
+
 if match
   puts "#{match[0]}"
 else
