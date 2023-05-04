@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Replace localhost in /etc/hosts file
+sed -i 's/^127.0.0.1.*localhost/127.0.0.2    localhost/' /etc/hosts
+
+# Add Facebook to /etc/hosts file
+echo "8.8.8.8    facebook.com" >> /etc/hosts
