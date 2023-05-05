@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 518/rpcbind
 1240/sshd
 547/rpc.statd
