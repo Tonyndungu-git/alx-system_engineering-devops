@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-# Use the ip command to list all network interfaces and their IP addresses
-ip addr show | awk '/inet / {print $2}' | cut -d'/' -f1
+# Use the ifconfig command to list all network interfaces and their IP addresses
+ifconfig | awk -F '[: ]+' '/inet addr:/ {print $4}'
