@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 input = ARGV[0]
 regex = /\[from:(?<sender>[^\]]+)\].*\[to:(?<receiver>[^\]]+)\].*\[flags:(?<flags>[^\]]+)\]/
 match = input.match(regex)
