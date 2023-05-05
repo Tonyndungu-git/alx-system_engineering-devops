@@ -1,11 +1,4 @@
-518/rpcbind
-1240/sshd
-547/rpc.statd
-518/rpcbind
-1240/sshd
-547/rpc.statd
-518/rpcbind
-1/init
-835/dbus-daemon
-1087/acpid
-378/systemd-udevd
+#!/usr/bin/env bash
+
+# Bash script that displays listening ports
+netstat -pl
