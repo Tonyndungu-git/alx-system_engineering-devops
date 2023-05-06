@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#nested while loops
 hour=0
 while [ $hour -le 12 ]
 do
