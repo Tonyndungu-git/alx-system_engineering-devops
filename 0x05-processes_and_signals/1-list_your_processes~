@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Show all processes for all users, including those without a TTY
+ps -aux
+# Display in a user-oriented format
+ps -eo user,pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -n 11
+# Show process hierarchy
+ps -ef --forest
