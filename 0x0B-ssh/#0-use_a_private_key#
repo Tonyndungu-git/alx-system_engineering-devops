@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+# Set correct permissions for the private key file
+chmod 600 ~/.ssh/school
+
+# Connect to the server using ssh
+ssh -i ~/.ssh/school -l ubuntu your-server-ip-address
