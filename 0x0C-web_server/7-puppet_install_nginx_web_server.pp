@@ -1,38 +1,35 @@
 # File: 7-puppet_install_nginx_web_server.pp
+# redirect me and nginx
+exec {'apt-get-update':
+  command => '/usr/bin/apt-get update'
+}
 
-# Install Nginx package
+package {'apache2.2-common':
+  ensure  => 'absent',
+  require => Exec['apt-get-update']
+}
+
 package { 'nginx':
-  ensure => installed,
+  ensure  => 'installed',
+  require => Package['apache2.2-common']
 }
 
-# Configure Nginx server
-file { '/etc/nginx/sites-available/default':
-  ensure  => file,
-  content => "
-    server {
-      listen 80;
-      server_name _;
-
-      location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-      }
-
-      location / {
-        echo 'Hello World!';
-      }
-    }
-  ",
+service {'nginx':
+  ensure  =>  'running',
+  require => file_line['perform a redirection'],
 }
 
-# Enable Nginx default site
-file { '/etc/nginx/sites-enabled/default':
-  ensure => link,
-  target => '/etc/nginx/sites-available/default',
-  notify => Service['nginx'],
+file { '/var/www/html/index.html':
+  ensure  => 'present',
+  content => 'Holberton School',
+  require =>  Package['nginx']
 }
 
-# Restart Nginx service
-service { 'nginx':
-  ensure => running,
-  enable => true,
+file_line { 'perform a redirection':
+  ensure  => 'present',
+  path    => '/etc/nginx/sites-enabled/default',
+  line    => 'rewrite ^/redirect_me/$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;',
+  after   => 'root /var/www/html;',
+  require => Package['nginx'],
+  notify  => Service['nginx'],
 }
