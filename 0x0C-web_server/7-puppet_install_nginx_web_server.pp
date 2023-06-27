@@ -1,34 +1,38 @@
-# redirect me and nginx
-exec {'apt-get-update':
-  command => '/usr/bin/apt-get update'
-}
+# File: 7-puppet_install_nginx_web_server.pp
 
-package {'apache2.2-common':
-  ensure  => 'absent',
-  require => Exec['apt-get-update']
-}
-
+# Install Nginx package
 package { 'nginx':
-  ensure  => 'installed',
-  require => Package['apache2.2-common']
+  ensure => installed,
 }
 
-service {'nginx':
-  ensure  =>  'running',
-  require => file_line['perform a redirection'],
+# Configure Nginx server
+file { '/etc/nginx/sites-available/default':
+  ensure  => file,
+  content => "
+    server {
+      listen 80;
+      server_name _;
+
+      location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+      }
+
+      location / {
+        echo 'Hello World!';
+      }
+    }
+  ",
 }
 
-file { '/var/www/html/index.html':
-  ensure  => 'present',
-  content => 'Hello World!',
-  require =>  Package['nginx']
+# Enable Nginx default site
+file { '/etc/nginx/sites-enabled/default':
+  ensure => link,
+  target => '/etc/nginx/sites-available/default',
+  notify => Service['nginx'],
 }
 
-file_line { 'perform a redirection':
-  ensure  => 'present',
-  path    => '/etc/nginx/sites-enabled/default',
-  line    => 'rewrite ^/redirect_me/$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;',
-  after   => 'root /var/www/html;',
-  require => Package['nginx'],
-  notify  => Service['nginx'],
+# Restart Nginx service
+service { 'nginx':
+  ensure => running,
+  enable => true,
 }
