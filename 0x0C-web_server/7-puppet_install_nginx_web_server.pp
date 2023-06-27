@@ -1,4 +1,3 @@
-# File: 7-puppet_install_nginx_web_server.pp
 # redirect me and nginx
 exec {'apt-get-update':
   command => '/usr/bin/apt-get update'
