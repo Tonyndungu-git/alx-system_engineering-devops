@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
-
-# Installing Nginx on Server and 404 page
-sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install -y nginx
-sudo chown -R "$USER":"$USER" /var/www/
-sudo chown -R "$USER":"$USER" /etc/nginx
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
-echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html
-line="\\\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}"
-sudo sed -i "27i $line" /etc/nginx/sites-available/default
-sudo service nginx restart
-sudo service nginx reload
+# install nginx and sets the error page
+apt-get update
+apt-get install nginx -y
+echo "Hello World" > /var/www/html/index.html
+sed -i '/listen 80 default_server;/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+echo "Ceci n'est pas une page" > /usr/share/nginx/html/error_page.html
+sed -i "/root \/var\/www\/html;/a error_page 404 \/error_page.html;\nlocation = /error_page.html {\nroot \/usr\/share\/nginx\/html;\ninternal;\n}" /etc/nginx/sites-available/default
+service nginx start
