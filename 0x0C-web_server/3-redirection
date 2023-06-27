@@ -1,31 +1,11 @@
 #!/usr/bin/env bash
-# Update package repositories
-sudo apt update
-
-# Install Nginx
-sudo apt install -y nginx
-
-# Configure Nginx for redirection
-sudo tee /etc/nginx/sites-available/redirect <<EOF
-server {
-    listen 80;
-    server_name your_domain.com;
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-
-    location / {
-        return 404;
-    }
-}
-EOF
-
-# Enable the redirect configuration
-sudo ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
-
-# Test Nginx configuration
-sudo nginx -t
-
-# Restart Nginx
+# Installing Nginx on Server and redirect
+sudo apt-get update -y && sudo apt-get upgrade -y
+sudo apt-get install -y nginx
+sudo chown -R "$USER":"$USER" /var/www/
+sudo chown -R "$USER":"$USER" /etc/nginx
+echo "Hello World" > /var/www/html/index.html
+line="\\\trewrite ^/redirect_me https://www.youtube.com/watch?v=dQw4w9WgXcQ permanent;"
+sudo sed -i "26i $line" /etc/nginx/sites-available/default
 sudo service nginx restart
+sudo service nginx reload
