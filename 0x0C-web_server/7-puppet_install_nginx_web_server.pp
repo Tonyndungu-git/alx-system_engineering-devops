@@ -1,34 +1,22 @@
-# redirect me and nginx
-exec {'apt-get-update':
-  command => '/usr/bin/apt-get update'
+# Install and configure nginx
+package { 'jfryman-nginx':
+  ensure => installed,
 }
 
-package {'apache2.2-common':
-  ensure  => 'absent',
-  require => Exec['apt-get-update']
+include nginx
+
+class { 'nginx':
+  manage_repo    => true,
+  package_source => 'nginx-stable',
 }
 
-package { 'nginx':
-  ensure  => 'installed',
-  require => Package['apache2.2-common']
+nginx::resource::server { '35.175.104.197':
+  listen_port      => 80,
+  www_root         => '/var/www/html/',
+  vhost_cfg_append => { 'rewrite' => '^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent' },
 }
 
-service {'nginx':
-  ensure  =>  'running',
-  require => file_line['perform a redirection'],
-}
-
-file { '/var/www/html/index.html':
-  ensure  => 'present',
+file { 'index':
+  path    => '/var/www/html/index.html',
   content => 'Hello World!',
-  require =>  Package['nginx']
-}
-
-file_line { 'perform a redirection':
-  ensure  => 'present',
-  path    => '/etc/nginx/sites-enabled/default',
-  line    => 'rewrite ^/redirect_me/$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;',
-  after   => 'root /var/www/html;',
-  require => Package['nginx'],
-  notify  => Service['nginx'],
 }
