@@ -1,22 +1,30 @@
-# Install and configure nginx
-package { 'jfryman-nginx':
+# Install Nginx package
+package { 'nginx':
   ensure => installed,
 }
 
-include nginx
-
-class { 'nginx':
-  manage_repo    => true,
-  package_source => 'nginx-stable',
+# Configure Nginx
+file { '/etc/nginx/sites-available/default':
+  ensure  => file,
+  content => "
+    server {
+      listen 80;
+      root /var/www/html;
+      index index.html;
+      location / {
+        return 301 /redirect_me;
+      }
+      location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+      }
+    }
+  ",
+  notify  => Service['nginx'],
 }
 
-nginx::resource::server { '35.175.104.197':
-  listen_port      => 80,
-  www_root         => '/var/www/html/',
-  vhost_cfg_append => { 'rewrite' => '^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent' },
-}
-
-file { 'index':
-  path    => '/var/www/html/index.html',
-  content => 'Hello World!',
+# Ensure Nginx service is running and enabled
+service { 'nginx':
+  ensure  => running,
+  enable  => true,
+  require => Package['nginx'],
 }
