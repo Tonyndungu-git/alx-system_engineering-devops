@@ -1,11 +1,9 @@
-#!/bin/env bash
+#!/usr/bin/env bash
+# Configure Nginx so that its HTTP response contains a custom header
 
-# Install Nginx
 apt-get update
-apt-get install -y nginx
-
-# Create a custom Nginx configuration file for the custom header
-echo 'add_header X-Served-By $hostname;' | tee /etc/nginx/conf.d/custom_header.conf
-
-# Restart Nginx to apply the changes
-systemctl restart nginx
+apt-get install nginx -y
+echo "Hello World" > /var/www/html/index.nginx-debian.html
+sed -i '/listen 80 default_server;/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+sed -i '/listen 80 default_server;/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+service nginx star
