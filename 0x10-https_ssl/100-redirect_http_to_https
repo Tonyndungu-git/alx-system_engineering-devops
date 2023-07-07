@@ -40,10 +40,8 @@ listen http-incoming
 	server 199774-web-01 35.175.104.197
 	server 199774-web-02 100.25.181.13
 frontend www-http
-	bind *:80
     	mode http
-   	default_backend webserver
-frontend www-https
+	bind *:80
         bind *:443 ssl /etc/letsencrypt/live/tonyndungu-dev.tech
         default_backend webserver
 backend webserver
