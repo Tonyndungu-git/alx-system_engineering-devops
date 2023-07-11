@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
-# debuging, nginx listnig 80
 
-sudo service nginx stop
-sudo sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
-sudo sed -i 's/8080/80/g' /etc/nginx/sites-available/default
-sudo service nginx start
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null; then
+    sudo apt update
+    sudo apt install nginx
+fi
+
+# Check and update Nginx configuration
+sudo sed -i '/include \/etc\/nginx\/conf.d\/\*\.conf;/a listen 80;' /etc/nginx/nginx.conf
+sudo sed -i '/^listen\s*80;$/d' /etc/nginx/conf.d/default.conf
+echo "listen 80;" | sudo tee -a /etc/nginx/conf.d/default.conf
+
+# Restart Nginx
+sudo service nginx restart
