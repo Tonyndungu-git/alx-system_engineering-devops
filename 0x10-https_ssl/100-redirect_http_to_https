@@ -7,6 +7,8 @@ global
 	user haproxy
 	group haproxy
 	daemon
+	maxconn 2048
+	tune.ssl.default-dh-param 2048
 
 	# Default SSL material locations
 	ca-base /etc/ssl/certs
@@ -32,12 +34,28 @@ defaults
 	errorfile 502 /etc/haproxy/errors/502.http
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
+	option forwardfor
+   	option http-server-close
+listen http-incoming
+	mode http
+	balance roundrobin
+	bind :80
+	option forwardfor
+	server 199774-web-01 35.175.104.197
+	server 199774-web-02 100.25.181.13
 frontend www-http
-    	mode http
-	bind *:80
-        bind *:443 ssl /etc/letsencrypt/live/tonyndungu-dev.tech
-        default_backend webserver
-backend webserver
-    	balance roundrobin
-    	server 199774-web-01 35.175.104.197 check
-	server 199774-web-02 100.25.181.13 check
+   bind 35.174.185.109:80
+   reqadd X-Forwarded-Proto:\ http
+   default_backend www-backend
+frontend www-https
+   bind 35.174.185.109:443 ssl crt /etc/haproxy/certs/tonyndungu-dev.tech.pem
+   reqadd X-Forwarded-Proto:\ https
+   acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+   use_backend letsencrypt-backend if letsencrypt-acl
+   default_backend www-backend
+backend www-backend
+   redirect scheme https if !{ ssl_fc }
+   server www-1 35.175.104.197:80 check
+   server www-2 100.25.181.13:80 check
+backend letsencrypt-backend
+   server letsencrypt 127.0.0.1:54321
