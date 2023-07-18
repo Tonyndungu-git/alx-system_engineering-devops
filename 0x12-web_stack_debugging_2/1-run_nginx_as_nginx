@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Stop the Nginx service
+service nginx stop
+
+# Create a backup of the original Nginx configuration file
+cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+
+# Update the Nginx configuration file to run as the 'nginx' user
+sed -i 's/user  nginx;/user  nginx;\n    listen       8080;/g' /etc/nginx/nginx.conf
+
+# Start the Nginx service
+service nginx start
