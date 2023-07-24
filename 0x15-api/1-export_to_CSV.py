@@ -1,8 +1,9 @@
 #!/usr/bin/python3
-
+""" creating a csv file from an api """
 import requests
 import sys
 import csv
+
 
 def get_employee_todo(employee_id):
     """ gets details of what TODO has an employee done """
@@ -32,19 +33,15 @@ def get_employee_todo(employee_id):
 #        writer.writeheader()
 
         for task in todo_data:
-                task_id = task["id"]
-                task_title = task["title"]
-                task_status = "COMPLETED" if task["completed"] else "NOT COMPLETED"
-                writer.writerow({"USER_ID": employee_id,
-                                 "USERNAME": employee_username,
-                                 "TASK_COMPLETED_STATUS": task_status,
-                                 "TASK_TITLE": task_title
-                })
-
-
+            task_id = task["id"]
+            task_title = task["title"]
+            task_status = "COMPLETED" if task["completed"] else "NOT COMPLETED"
+            writer.writerow({"USER_ID": employee_id,
+                             "USERNAME": employee_username,
+                             "TASK_COMPLETED_STATUS": task_status,
+                             "TASK_TITLE": task_title})
 
 
 if __name__ == "__main__":
-
     employee_id = int(sys.argv[1])
     get_employee_todo(employee_id)
