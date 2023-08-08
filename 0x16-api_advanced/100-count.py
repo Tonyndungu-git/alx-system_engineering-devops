@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" count the number of hot posts"""
+""" count the number of hot posts words """
 import pprint
 import re
 import requests
@@ -8,7 +8,7 @@ BASE_URL = 'http://reddit.com/r/{}/hot.json'
 
 
 def count_words(subreddit, word_list, hot_list=[], after=None):
-    """ get all hot posts """
+    """ get all hot posts words """
     headers = {'User-agent': 'Unix:0-subs:v1'}
     params = {'limit': 100}
     if isinstance(after, str):
