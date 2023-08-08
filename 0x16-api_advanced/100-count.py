@@ -1,38 +1,47 @@
+#!/usr/bin/python3
+""" count the number of hot posts"""
+import pprint
+import re
 import requests
 
-def count_words(subreddit, word_list, after=None, counts=None):
-    if counts is None:
-        counts = {}
+BASE_URL = 'http://reddit.com/r/{}/hot.json'
 
-    headers = {'User-Agent': 'CustomUserAgent'}
 
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    params = {'after': after} if after else {}
-
-    try:
-        response = requests.get(url, headers=headers, params=params)
-        data = response.json()
-
-        if 'data' in data and 'children' in data['data']:
-            hot_posts = data['data']['children']
-            for post in hot_posts:
-                post_title = post['data']['title'].lower()
-
-                for word in word_list:
-                    if f" {word.lower()} " in f" {post_title} ":
-                        counts[word] = counts.get(word, 0) + 1
-
-            # Check for pagination (more posts available)
-            after = data['data']['after']
-            if after:
-                count_words(subreddit, word_list, after=after, counts=counts)
-
+def count_words(subreddit, word_list, hot_list=[], after=None):
+    """ get all hot posts """
+    headers = {'User-agent': 'Unix:0-subs:v1'}
+    params = {'limit': 100}
+    if isinstance(after, str):
+        if after != "STOP":
+            params['after'] = after
         else:
-            return None
+            return print_results(word_list, hot_list)
 
-    except requests.RequestException as e:
-        print("An error occurred:", e)
+    response = requests.get(BASE_URL.format(subreddit),
+                            headers=headers, params=params)
+    if response.status_code != 200:
+        return None
+    data = response.json().get('data', {})
+    after = data.get('after', 'STOP')
+    if not after:
+        after = "STOP"
+    hot_list = hot_list + [post.get('data', {}).get('title')
+                           for post in data.get('children', [])]
+    return count_words(subreddit, word_list, hot_list, after)
 
-    sorted_counts = sorted(counts.items(), key=lambda x: (-x[1], x[0]))
-    for word, count in sorted_counts:
-        print(f"{word}: {count}")
+
+def print_results(word_list, hot_list):
+    """ prints request results """
+    count = {}
+    for word in word_list:
+        count[word] = 0
+    for title in hot_list:
+        for word in word_list:
+            count[word] = count[word] +\
+             len(re.findall(r'(?:^| ){}(?:$| )'.format(word), title, re.I))
+
+    count = {k: v for k, v in count.items() if v > 0}
+    words = sorted(list(count.keys()))
+    for word in sorted(words,
+                       reverse=True, key=lambda k: count[k]):
+        print("{}: {}".format(word, count[word]))
