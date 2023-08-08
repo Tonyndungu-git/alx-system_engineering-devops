@@ -1,6 +1,7 @@
-#/usr/bin/python3
+#!/usr/bin/python3
 """ number of subsribers in an api """
 import requests
+
 
 def number_of_subscribers(subreddit):
     """ number of subsribers in a Reddit API """
