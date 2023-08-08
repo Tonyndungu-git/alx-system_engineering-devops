@@ -5,6 +5,7 @@ of hot articles.
 """
 import requests
 
+
 def recurse(subreddit, hot_list=None):
     """ titles of all hot articles for a given subreddit """
     if hot_list is None:
