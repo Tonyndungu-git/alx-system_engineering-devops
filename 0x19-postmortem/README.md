@@ -2,7 +2,7 @@
 
 ## **Issue Summary**
 
-- **Duration:** August 5, 2023, 10:00 AM to August 5, 2023, 2:00 PM (UTC)
+- **Duration:** August 10, 2023, 10:00 AM to August 10, 2023, 2:00 PM (EAC)
 - **Impact:** Complete service disruption of WordPress website hosted on LAMP stack, resulting in a 100% outage.
 - **Root Cause:** Misconfigured Apache virtual host leading to a 500 Internal Server Error.
 
@@ -19,7 +19,7 @@
 
 ## **Root Cause and Resolution**
 
-The root cause was a misconfigured virtual host file for Apache. The lack of mod_rewrite directives resulted in URL rewriting failure, generating 500 Internal Server Errors. The Systems team resolved the issue by updating the virtual host configuration (`/etc/apache2/sites-available/wordpress.conf`) with correct mod_rewrite directives and rules.
+The root cause was a misconfigured virtual host file for Apache. The lack of mod_rewrite directives resulted in URL rewriting failure, generating 500 Internal Server Errors. The Systems team resolved the issue by updating the virtual host configuration with correct mod_rewrite directives and rules.
 
 ## **Corrective and Preventative Measures**
 
