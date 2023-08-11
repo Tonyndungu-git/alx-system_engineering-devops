@@ -1,5 +1,9 @@
 # WordPress Website Outage Postmortem
 
+<div align="center">
+  <img src="https://drive.google.com/file/d/1bmWPGvJj0myr0LautviTXONzwXQZshFO/view?usp=drive_link" alt="Outage Fun Image" width="400px" />
+</div>
+
 ## **Issue Summary**
 
 - **Duration:** August 10, 2023, 10:00 AM to August 10, 2023, 2:00 PM (EAT)
