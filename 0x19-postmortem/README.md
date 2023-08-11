@@ -2,7 +2,7 @@
 
 ## **Issue Summary**
 
-- **Duration:** August 10, 2023, 10:00 AM to August 10, 2023, 2:00 PM (EAC)
+- **Duration:** August 10, 2023, 10:00 AM to August 10, 2023, 2:00 PM (EAT)
 - **Impact:** Complete service disruption of WordPress website hosted on LAMP stack, resulting in a 100% outage.
 - **Root Cause:** Misconfigured Apache virtual host leading to a 500 Internal Server Error.
 
