@@ -1,5 +1,5 @@
 #!/bin/env bash
-# reload gunicorn server gracefully
+#  reload gunicorn server gracefully
 pkill -HUP gunicorn
 
 if pgrep -x "gunicorn" > /dev/null; then
