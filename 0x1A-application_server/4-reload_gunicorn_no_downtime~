@@ -1,0 +1,5 @@
+#!/bin/bash
+
+kill -HUP $(cat /path/to/gunicorn.pid)
+sleep 10
+/path/to/gunicorn -c /path/to/gunicorn_config.py myapp:app  
